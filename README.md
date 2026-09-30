@@ -59,3 +59,8 @@ Ce diagramme représente l’ordre chronologique des échanges entre les différ
 - En **mode maintenance**, les données ne sont plus écrites sur la carte SD mais peuvent être consultées directement depuis le **port série**.
 - La carte SD peut alors être retirée et replacée en toute sécurité.
 - En cas de carte SD pleine ou d’erreur d’accès/écriture, le système utilise le signal lumineux prévu.
+  
+## SOURCES
+• Sujet du projet Worldwide Weather Watcher fourni dans la demande.
+• Document « A2 – Projet Système embarqué – Modes de fonctionnement » fourni avec la demande.
+• https://lucid.co/fr/diagramme/uml
