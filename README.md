@@ -1,5 +1,7 @@
 # LIVRABLE 1 — ANALYSE DU SYSTÈME
 
+![contraintes et exigences.](images/contraintesetexigences.png)
+
 ## 1. DIAGRAMME DE CAS D’UTILISATION
 
 ### Description
@@ -33,4 +35,7 @@ Ce diagramme représente les différents composants matériels du **Worldwide We
 
 Ce diagramme représente l’ordre chronologique des échanges entre les différents composants du système lors de l’acquisition et du traitement des données.
 
-![Diagramme de séquence](images/diagramme_sequence.png)
+
+![Signalisation LED_RGB](images/SignalisationLED_RGB.png)
+
+
