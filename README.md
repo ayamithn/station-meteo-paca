@@ -3,7 +3,18 @@
 ## 1. EXIGENCES
 
 ![contraintes et exigences.](images/exigences.png)
+### DESCRIPTION 
 
+- **Mesure de la température** : le système mesure la température de l’air.
+- **Mesure de la pression** : le système mesure la pression atmosphérique.
+- **Mesure de l’hygrométrie** : le système mesure l’hygrométrie.
+- **Mesure de la luminosité** : le système mesure la luminosité et permet de déterminer son niveau.
+- **Acquisition GPS** : le système récupère les données du GPS.
+- **Horodatage** : les mesures sont enregistrées avec la date et l’heure.
+- **Stockage des données** : les mesures sont enregistrées sur une carte SD.
+- **Contrôle utilisateur** : l’utilisateur peut accéder aux différents modes de fonctionnement à l’aide des boutons poussoirs.
+- **Signalisation de l’état** : une LED permet d’indiquer l’état du système et de signaler certaines erreurs.[voire partie SIGNALISATION](#5.-signalisation-led-rgb
+) 
 ## 2. DIAGRAMME DE CAS D’UTILISATION
 
 ### Description
