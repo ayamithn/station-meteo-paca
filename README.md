@@ -49,11 +49,11 @@ Ce diagramme représente les différents composants matériels du **Worldwide We
 Ce diagramme représente l’ordre chronologique des échanges entre les différents composants du système lors de l’acquisition et du traitement des données.
 ![Diagramme de composants](images/diagramme_sequence.png)
 
-## 5. SIGNALISATION LED RGB
+## SIGNALISATION 
 
 ![Signalisation LED_RGB](images/SignalisationLED_RGB.png)
 
-## 8. Gestion et stockage des données
+## 6. Gestion et stockage des données
 
 - Les mesures sont enregistrées sur une **carte SD**.
 - L’ensemble des mesures est enregistré sur **une seule ligne horodatée**.
