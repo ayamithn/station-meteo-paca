@@ -13,8 +13,7 @@
 - **Horodatage** : les mesures sont enregistrées avec la date et l’heure.
 - **Stockage des données** : les mesures sont enregistrées sur une carte SD.
 - **Contrôle utilisateur** : l’utilisateur peut accéder aux différents modes de fonctionnement à l’aide des boutons poussoirs.
-- **Signalisation de l’état** : une LED permet d’indiquer l’état du système et de signaler certaines erreurs.[voire partie SIGNALISATION](#5.-signalisation-led-rgb
-) 
+- **Signalisation de l’état** : une LED permet d’indiquer l’état du système et de signaler certaines erreurs.[voire partie SIGNALISATION](#signalisation) 
 ## 2. DIAGRAMME DE CAS D’UTILISATION
 
 ### Description
