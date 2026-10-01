@@ -13,7 +13,7 @@
 - **Horodatage** : les mesures sont enregistrées avec la date et l’heure.
 - **Stockage des données** : les mesures sont enregistrées sur une carte SD.
 - **Contrôle utilisateur** : l’utilisateur peut accéder aux différents modes de fonctionnement à l’aide des boutons poussoirs.
-- **Signalisation de l’état** : une LED permet d’indiquer l’état du système et de signaler certaines erreurs.[ voire partie signalisation ](#6.-signalisation) 
+- **Signalisation de l’état** : une LED permet d’indiquer l’état du système et de signaler certaines erreurs.[ voire partie signalisation ](#6.signalisation) 
 ## 2. DIAGRAMME DE CAS D’UTILISATION
 
 ### Description
@@ -48,7 +48,7 @@ Ce diagramme représente les différents composants matériels du **Worldwide We
 Ce diagramme représente l’ordre chronologique des échanges entre les différents composants du système lors de l’acquisition et du traitement des données.
 ![Diagramme de composants](images/diagramme_sequence.png)
 
-## 6. SIGNALISATION 
+## 6.SIGNALISATION 
 
 ![Signalisation LED_RGB](images/SignalisationLED_RGB.png)
 
