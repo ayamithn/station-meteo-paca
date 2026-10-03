@@ -29,7 +29,7 @@ Ce diagramme présente les principales fonctionnalités du Worldwide Weather Wat
 
 Ce diagramme représente le déroulement des opérations réalisées par la station météo, depuis le démarrage jusqu’à la réalisation périodique des mesures.
 
-![Diagramme d’activité](images/diagramme_activite.png)
+![Diagramme d’activité](images/Diagramme_d_activite.drawio.png)
 
 
 ## 4. DIAGRAMME DE COMPOSANTS
@@ -38,7 +38,7 @@ Ce diagramme représente le déroulement des opérations réalisées par la stat
 
 Ce diagramme représente les différents composants matériels du **Worldwide Weather Watcher** ainsi que leurs interactions avec la carte **STM32 Nucleo**.
 
-![Diagramme de composants](images/diagramme_composants.png)
+![Diagramme de composants](images/Diagramme_de_composants.drawio.png)
 
 
 ## 5. DIAGRAMME DE SÉQUENCE
