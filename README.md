@@ -47,7 +47,7 @@ Le système propose trois autres modes spécifiques accessibles (en plus du mode
 * **Démarrer mode standard** : le mode principal dans lequel la station effectue ses mesures et enregistrements
 * **Basculer mode économique** : activé par un appui de 5 secondes sur le bouton vert pour réduire la fréquence des relevés et économiser de l'énergie
 * **Basculer mode maintenance** : activé par un appui de 5 secondes sur le bouton rouge pour permettre les vérifications techniques sur le matériel
-* **Basculer mode configuration** : activé au démarrage en maintenant le bouton rouge enfoncé**. Il y a donc un retour automatique en mode standard qui s'effectue après 30 minutes sans activité.
+* **Basculer mode configuration** : activé au démarrage en maintenant le bouton rouge enfoncé. Il y a donc un retour automatique en mode standard qui s'effectue après 30 minutes sans activité.
 
 #### Dans une deuxième partie nous pouvons voir les mesures, l'affichage et la sauvegarde des données
 * **Consulter les mesures** : permet de lire directement les valeurs météo
