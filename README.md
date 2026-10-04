@@ -4,25 +4,57 @@
 
 ![contraintes et exigences.](images/exigences.png)
 ### DESCRIPTION 
+Ce diagramme d'exigences regroupe les neuf besoins fondamentaux de la station météo embarquée. Chaque exigence possède un identifiant unique (de `REQ-01` à `REQ-09`) pour faciliter le suivi tout au long du projet.
 
+#### Nous avons les mesures environnementales
 - **Mesure de la température** : le système mesure la température de l’air.
 - **Mesure de la pression** : le système mesure la pression atmosphérique.
 - **Mesure de l’hygrométrie** : le système mesure l’hygrométrie.
 - **Mesure de la luminosité** : le système mesure la luminosité et permet de déterminer son niveau.
+
+#### Ensuite nous avons la géolocalisation et l'horodatage de la station météo
 - **Acquisition GPS** : le système récupère les données du GPS.
 - **Horodatage** : les mesures sont enregistrées avec la date et l’heure.
+
+#### Pour finir nous avons l'enregistrement et l'interfaçage
 - **Stockage des données** : les mesures sont enregistrées sur une carte SD.
 - **Contrôle utilisateur** : l’utilisateur peut accéder aux différents modes de fonctionnement à l’aide des boutons poussoirs.
-- **Signalisation de l’état** : une LED permet d’indiquer l’état du système et de signaler certaines erreurs.[ voire partie signalisation ](#signalisation) 
+- **Signalisation de l’état** : une LED permet d’indiquer l’état du système et de signaler certaines erreurs.
+
+
 ## 2. DIAGRAMME DE CAS D’UTILISATION
 
 ### Description
 
-Ce diagramme présente les principales fonctionnalités du Worldwide Weather Watcher et les interactions entre l’utilisateur et la station météo.
+Ce diagramme représente la manière dont l'utilisateur à bord interagit avec la station météo. Nous l'avons construit en trouvant d'abord l'acteur principal, puis en regroupant l'ensemble des actions possibles autour des modes de fonctionnement, de la consultation des données et des réglages du système
 
 ![Diagramme de cas d’utilisation](images/diagramme_cas_utilisation.png)
 
+### Résumé de notre démarche de modélisation
+Pour concevoir ce diagramme, nous avons suivi trois étapes :
+1. **Identification de l'acteur** : nous avons défini un unique acteur principal, le Membre de l'équipage, qui manipule la station directement sur le bateau
+2. **Définition des fonctionnalités principales** : nous avons listé les actions indispensables comme la prise de mesure, la sauvegarde sur carte SD, la configuration et la surveillance
+3. **Mise en place des règles matérielles** : nous avons associé les changements de modes aux boutons physiques.
 
+
+### Description du diagramme
+
+#### A. Gestion des modes de fonctionnement
+Le système s'articule autour du **Mode Standard** et propose trois autres modes spécifiques accessibles avec les boutons poussoirs[cite: 11] :
+* **Démarrer mode standard** : le mode principal dans lequel la station effectue ses mesures et enregistrements normaux[cite: 11].
+* **Basculer mode économique** : activé par un **appui de 5 secondes sur le bouton vert** pour réduire la fréquence des relevés et économiser l'énergie[cite: 11].
+* **Basculer mode maintenance** : activé par un **appui de 5 secondes sur le bouton rouge** pour permettre les vérifications techniques sur le matériel[cite: 11].
+* **Basculer mode configuration** : activé au démarrage en maintenant le **bouton rouge enfoncé**[cite: 11]. Un **retour automatique en mode standard** s'effectue après **30 minutes sans activité** pour éviter de laisser la station bloquée[cite: 11].
+
+#### B. Mesures, affichage et sauvegarde
+* **Consulter les mesures** : permet de lire directement les valeurs météo courantes[cite: 11].
+* **Acquérir les données des capteurs** : traitement interne qui lit les capteurs avant la consultation ou l'enregistrement[cite: 11].
+* **Enregistrer les données sur la carte SD** : sauvegarde automatiquement les relevés pour un traitement ultérieur[cite: 11].
+* **Consulter les données via l'interface série** : permet de lire le flux de données en direct en branchant un ordinateur[cite: 11].
+
+#### C. Réglages et surveillance
+* **Configurer les paramètres** : permet d'ajuster les options de la station[cite: 11].
+* **Surveiller l'état du système** : permet au membre de l'équipage de vérifier le bon fonctionnement général de la station
 ## 3. DIAGRAMME D’ACTIVITÉ
 
 ### Description
