@@ -42,7 +42,7 @@ Pour concevoir ce diagramme, nous avons suivi trois étapes :
 
 ### Description du diagramme
 
-#### Dans une première partie pouvons voir la gestion des modes de fonctionnement
+#### Dans une première partie nous pouvons voir la gestion des modes de fonctionnement
 Le système propose trois autres modes spécifiques accessibles (en plus du mode standard) avec les boutons poussoirs :
 * **Démarrer mode standard** : le mode principal dans lequel la station effectue ses mesures et enregistrements
 * **Basculer mode économique** : activé par un appui de 5 secondes sur le bouton vert pour réduire la fréquence des relevés et économiser de l'énergie
