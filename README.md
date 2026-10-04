@@ -2,7 +2,7 @@
 
 ## 1. EXIGENCES
 
-![contraintes et exigences.](images/exigences.png)
+![contraintes et exigences.](images/exigences_drawio.png)
 ### DESCRIPTION 
 Ce diagramme d'exigences regroupe les neuf besoins fondamentaux de la station météo embarquée. Chaque exigence possède un identifiant unique (de `REQ-01` à `REQ-09`) pour faciliter le suivi tout au long du projet.
 
