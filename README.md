@@ -3,24 +3,23 @@
 ## 1. EXIGENCES
 
 ![contraintes et exigences.](images/exigences_drawio.png)
-### DESCRIPTION 
+### DESCRIPTION
 Ce diagramme d'exigences regroupe les neuf besoins fondamentaux de la station météo embarquée. Chaque exigence possède un identifiant unique (de `REQ-01` à `REQ-09`) pour faciliter le suivi tout au long du projet.
 
 #### Nous avons les mesures environnementales
-- **Mesure de la température** : le système mesure la température de l’air.
-- **Mesure de la pression** : le système mesure la pression atmosphérique.
-- **Mesure de l’hygrométrie** : le système mesure l’hygrométrie.
-- **Mesure de la luminosité** : le système mesure la luminosité et permet de déterminer son niveau.
+- **Mesure de la température (`REQ-01`)** : le système doit mesurer la température de l'air.
+- **Mesure de la pression (`REQ-02`)** : le système doit mesurer la pression atmosphérique.
+- **Mesure de l'hygrométrie (`REQ-03`)** : le système doit mesurer le taux d'humidité présent dans l'air.
+- **Mesure de la luminosité (`REQ-04`)** : le système doit mesurer la luminosité aux alentours.
 
 #### Ensuite nous avons la géolocalisation et l'horodatage de la station météo
-- **Acquisition GPS** : le système récupère les données du GPS.
-- **Horodatage** : les mesures sont enregistrées avec la date et l’heure.
+- **Positionnement GPS (`REQ-05`)** : le système doit repérer la position du navire via GPS.
+- **Repérer l'horloge (`REQ-06`)** : le système doit associer une date et une heure à chaque mesure.
 
 #### Pour finir nous avons l'enregistrement et l'interfaçage
-- **Stockage des données** : les mesures sont enregistrées sur une carte SD.
-- **Contrôle utilisateur** : l’utilisateur peut accéder aux différents modes de fonctionnement à l’aide des boutons poussoirs.
-- **Signalisation de l’état** : une LED permet d’indiquer l’état du système et de signaler certaines erreurs.
-
+- **Stockage des données (`REQ-07`)** : le système doit sauvegarder toutes les mesures sur la carte SD.
+- **Contrôle pour l'utilisateur (`REQ-08`)** : le système doit permettre à l'utilisateur de démarrer et d'arrêter le système via les boutons poussoirs. Les modes de fonctionnement accessibles avec ces boutons sont détaillés dans la section 2.
+- **Signalisation d'état (`REQ-09`)** : le système doit indiquer son état (fonctionnement normal, erreur, etc.) à l'utilisateur via une LED RGB.
 
 ## 2. DIAGRAMME DE CAS D’UTILISATION
 
@@ -40,21 +39,21 @@ Pour concevoir ce diagramme, nous avons suivi trois étapes :
 ### Description du diagramme
 
 #### A. Gestion des modes de fonctionnement
-Le système s'articule autour du **Mode Standard** et propose trois autres modes spécifiques accessibles avec les boutons poussoirs[cite: 11] :
-* **Démarrer mode standard** : le mode principal dans lequel la station effectue ses mesures et enregistrements normaux[cite: 11].
-* **Basculer mode économique** : activé par un **appui de 5 secondes sur le bouton vert** pour réduire la fréquence des relevés et économiser l'énergie[cite: 11].
-* **Basculer mode maintenance** : activé par un **appui de 5 secondes sur le bouton rouge** pour permettre les vérifications techniques sur le matériel[cite: 11].
-* **Basculer mode configuration** : activé au démarrage en maintenant le **bouton rouge enfoncé**[cite: 11]. Un **retour automatique en mode standard** s'effectue après **30 minutes sans activité** pour éviter de laisser la station bloquée[cite: 11].
+Le système s'articule autour du **Mode Standard** et propose trois autres modes spécifiques accessibles avec les boutons poussoirs :
+* **Démarrer mode standard** : le mode principal dans lequel la station effectue ses mesures et enregistrements normaux.
+* **Basculer mode économique** : activé par un **appui de 5 secondes sur le bouton vert** pour réduire la fréquence des relevés et économiser l'énergie.
+* **Basculer mode maintenance** : activé par un **appui de 5 secondes sur le bouton rouge** pour permettre les vérifications techniques sur le matériel.
+* **Basculer mode configuration** : activé au démarrage en maintenant le **bouton rouge enfoncé**. Un **retour automatique en mode standard** s'effectue après **30 minutes sans activité** pour éviter de laisser la station bloquée.
 
 #### B. Mesures, affichage et sauvegarde
-* **Consulter les mesures** : permet de lire directement les valeurs météo courantes[cite: 11].
-* **Acquérir les données des capteurs** : traitement interne qui lit les capteurs avant la consultation ou l'enregistrement[cite: 11].
-* **Enregistrer les données sur la carte SD** : sauvegarde automatiquement les relevés pour un traitement ultérieur[cite: 11].
-* **Consulter les données via l'interface série** : permet de lire le flux de données en direct en branchant un ordinateur[cite: 11].
+* **Consulter les mesures** : permet de lire directement les valeurs météo courantes.
+* **Acquérir les données des capteurs** : traitement interne qui lit les capteurs avant la consultation ou l'enregistrement.
+* **Enregistrer les données sur la carte SD** : sauvegarde automatiquement les relevés pour un traitement ultérieur.
+* **Consulter les données via l'interface série** : permet de lire le flux de données en direct en branchant un ordinateur.
 
 #### C. Réglages et surveillance
-* **Configurer les paramètres** : permet d'ajuster les options de la station[cite: 11].
-* **Surveiller l'état du système** : permet au membre de l'équipage de vérifier le bon fonctionnement général de la station
+* **Configurer les paramètres** : permet d'ajuster les options de la station.
+* **Surveiller l'état du système** : permet au membre de l'équipage de vérifier le bon fonctionnement général de la station.
 ## 3. DIAGRAMME D’ACTIVITÉ
 
 ### Description
@@ -84,7 +83,7 @@ Ce diagramme représente l’ordre chronologique des échanges entre les différ
 
 ![Signalisation LED_RGB](images/SignalisationLED_RGB.png)
 
-## 7. Gestion et stockage des données
+## 6. Gestion et stockage des données
 
 - Les mesures sont enregistrées sur une **carte SD**.
 - L’ensemble des mesures est enregistré sur **une seule ligne horodatée**.
