@@ -2,7 +2,8 @@
 
 ## 1. EXIGENCES
 
-![contraintes et exigences.](images/exigences_drawio.png)
+![Diagramme des exigences.]](images/exigences_drawio.png)
+
 ### DESCRIPTION
 Ce diagramme d'exigences regroupe les neuf besoins fondamentaux de la station météo embarquée. Chaque exigence possède un identifiant unique (de `REQ-01` à `REQ-09`) pour faciliter le suivi tout au long du projet.
 
@@ -25,14 +26,14 @@ Ce diagramme d'exigences regroupe les neuf besoins fondamentaux de la station m�
 
 ### Description
 
-Ce diagramme représente la manière dont l'utilisateur à bord interagit avec la station météo. Nous l'avons construit en trouvant d'abord l'acteur principal, puis en regroupant l'ensemble des actions possibles autour des modes de fonctionnement, de la consultation des données et des réglages du système
+Ce diagramme représente la manière dont l'utilisateur à bord interagit avec la station météo. Nous l'avons construit en trouvant d'abord l'acteur principal, puis en regroupant l'ensemble des actions possibles autour des modes de fonctionnement, de la consultation des données et des réglages du système.
 
 ![Diagramme de cas d’utilisation](images/diagramme_cas_utilisation.png)
 
 ### Résumé de notre démarche de modélisation
 Pour concevoir ce diagramme, nous avons suivi trois étapes :
-1. **Identification de l'acteur** : nous avons défini un unique acteur principal, le Membre de l'équipage, qui manipule la station directement sur le bateau
-2. **Définition des fonctionnalités principales** : nous avons listé les actions indispensables comme la prise de mesure, la sauvegarde sur carte SD, la configuration et la surveillance
+1. **Identification de l'acteur** : nous avons défini un unique acteur principal, le Membre de l'équipage, qui manipule la station directement sur le bateau.
+2. **Définition des fonctionnalités principales** : nous avons listé les actions indispensables comme la prise de mesure, la sauvegarde sur carte SD, la configuration et la surveillance.
 3. **Mise en place des règles matérielles** : nous avons associé les changements de modes aux boutons physiques.
 
 
@@ -79,11 +80,11 @@ Ce diagramme représente les différents composants matériels du **Worldwide We
 Ce diagramme représente l’ordre chronologique des échanges entre les différents composants du système lors de l’acquisition et du traitement des données.
 ![Diagramme de composants](images/diagramme_sequence.png)
 
-## SIGNALISATION 
+## 6. SIGNALISATION 
 
 ![Signalisation LED_RGB](images/SignalisationLED_RGB.png)
 
-## 6. Gestion et stockage des données
+## 7. Gestion et stockage des données
 
 - Les mesures sont enregistrées sur une **carte SD**.
 - L’ensemble des mesures est enregistré sur **une seule ligne horodatée**.
