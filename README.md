@@ -155,13 +155,15 @@ Ce diagramme représente l’ordre chronologique des échanges et des messages t
 9. **Confirmation** : la Carte SD finalise l'écriture mémoire et transmet un renvoie d'une validation de la sauvegarde reçu à la carte STM32
 
 
+
 ## SIGNALISATION 
 
 ![Signalisation LED_RGB](images/SignalisationLED_RGB.png)
 
 
 
-## 7. Gestion et stockage des données
+
+## 6. Gestion et stockage des données
 Les mesures sont enregistrées sur une carte SD.
 - L’ensemble des mesures est enregistré sur une seule ligne horodatée.
 - L’intervalle entre deux mesures est de 10 minutes par défaut, configurable avec *LOG_INTERVAL*.
