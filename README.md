@@ -2,7 +2,7 @@
 
 ## 1. EXIGENCES
 
-![Diagramme des exigences.](images/exigences_drawio.png)
+![Diagramme des exigences.](UML-Diagram/requirement-diagram.png)
 
 ### DESCRIPTION 
 Ce diagramme d'exigences regroupe les neuf besoins fondamentaux de la station météo embarquée. Chaque exigence possède un identifiant unique (de *REQ-01* à *REQ-09*) pour faciliter le suivi tout au long du projet.
@@ -20,7 +20,7 @@ Ce diagramme d'exigences regroupe les neuf besoins fondamentaux de la station m�
 #### Pour finir nous avons l'enregistrement et l'interfaçage
 - **Stockage des données** : les mesures sont enregistrées sur une carte SD.
 - **Contrôle utilisateur** : l’utilisateur peut accéder aux différents modes de fonctionnement à l’aide des boutons poussoirs.
-- **Signalisation de l’état** : une LED permet d’indiquer l’état du système et de signaler certaines erreurs.
+- [**Signalisation de l’état**](#SIGNALISATION) : une LED permet d’indiquer l’état du système et de signaler certaines erreurs.
 
 
 
@@ -31,7 +31,7 @@ Ce diagramme d'exigences regroupe les neuf besoins fondamentaux de la station m�
 
 Ce diagramme représente la manière dont l'utilisateur à bord interagit avec la station météo. Nous l'avons construit en trouvant d'abord l'acteur principal, puis en regroupant l'ensemble des actions possibles autour des modes de fonctionnement, de la consultation des données et des réglages du système
 
-![Diagramme de cas d’utilisation](images/diagramme_cas_utilisation.png)
+![Diagramme de cas d’utilisation](UML-Diagram/use-case-diagram.png)
 
 ### Résumé de notre démarche de modélisation
 Pour concevoir ce diagramme, nous avons suivi trois étapes :
@@ -66,7 +66,7 @@ Le système propose trois autres modes spécifiques accessibles (en plus du mode
 
 Ce diagramme représente le déroulement des opérations réalisées par la station météo. Il permet de suivre pas à pas la logique du système, la gestion des erreurs et le passage entre le mode standard et le mode configuration
 
-![Diagramme d’activité](images/Diagramme_d_activite.drawio.png)
+![Diagramme d’activité](UML-Diagram/activity-diagram.png)
 
 ### Description
 
@@ -100,7 +100,7 @@ Une fois la phase de démarrage terminée, la station entre dans sa boucle princ
 
 Ce diagramme représente les différents composants matériels du système Worldwide Weather Watcher ainsi que les connexions physiques et les protocoles de communication avec la carte STM32 Nucleo
 
-![Diagramme de composants](images/Diagramme_de_composants.drawio.png)
+![Diagramme de composants](UML-Diagram/component-diagram.png)
 
 ### Description
 #### La carte maîtresse et Shield central
@@ -133,7 +133,7 @@ Les capteurs communiquent avec le Shield via différents bus et protocoles norma
 
 Ce diagramme représente l’ordre chronologique des échanges et des messages transmis entre les différents composants du système (acteur, contrôleur, capteurs, ...) lors de l’initialisation, de l’acquisition et du traitement des données
 
-![Diagramme de composants](images/diagramme_sequence.png)
+![Diagramme de composants](UML-Diagram/sequence-diagram.png)
 
 ### Description
 
@@ -158,7 +158,7 @@ Ce diagramme représente l’ordre chronologique des échanges et des messages t
 
 ## SIGNALISATION 
 
-![Signalisation LED_RGB](images/SignalisationLED_RGB.png)
+![Signalisation LED_RGB](UML-Diagram/RGB-LED-signaling.png)
 
 
 
