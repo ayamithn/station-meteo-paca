@@ -184,3 +184,4 @@ Les mesures sont enregistrées sur une carte SD.
 • Sujet du projet Worldwide Weather Watcher fourni dans la demande.
 • Document « A2 – Projet Système embarqué – Modes de fonctionnement » fourni avec la demande.
 • https://lucid.co/fr/diagramme/uml
+• Utilisation d’un LLM pour la correction orthographique et la relecture du document.
