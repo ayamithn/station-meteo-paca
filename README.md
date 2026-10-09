@@ -1,13 +1,5 @@
 # LIVRABLE 1 — ANALYSE DU SYSTÈME
 
-## ÉQUIPE
-
-| Membre | Rôle | GitHub |
-|---|---|---|
-| Aymane TAHANI | Diagramme d'activité, exigences et rédaction du README | [@ayamithn](https://github.com/ayamithn) |
-| Alexandre ALIAS | Diagramme de composants |[@QLEEEX](https://github.com/QLEEEX) |
-| Pierre DE JOUVENCEL | Diagramme de cas d'utilisation |[@pierrejouvencel08-ship-it](https://github.com/pierrejouvencel08-ship-it) |
-| Clément BOUYSSOU | Diagramme de séquence et rédaction du README | [@clement-bsso](https://github.com/clement-bsso) |
 ## 1. EXIGENCES
 
 ![Diagramme des exigences.](UML-Diagram/requirement-diagram.png)
@@ -193,3 +185,12 @@ Les mesures sont enregistrées sur une carte SD.
 • Document « A2 – Projet Système embarqué – Modes de fonctionnement » fourni avec la demande.
 • https://lucid.co/fr/diagramme/uml
 • Utilisation d’un LLM pour la correction orthographique et la relecture du document.
+
+## ÉQUIPE
+
+| Membre | Rôle | GitHub |
+|---|---|---|
+| Aymane TAHANI | Diagramme d'activité, exigences et rédaction du README | [@ayamithn](https://github.com/ayamithn) |
+| Alexandre ALIAS | Diagramme de composants |[@QLEEEX](https://github.com/QLEEEX) |
+| Pierre DE JOUVENCEL | Diagramme de cas d'utilisation |[@pierrejouvencel08-ship-it](https://github.com/pierrejouvencel08-ship-it) |
+| Clément BOUYSSOU | Diagramme de séquence et rédaction du README | [@clement-bsso](https://github.com/clement-bsso) |
