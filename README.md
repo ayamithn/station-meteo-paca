@@ -5,8 +5,9 @@
 | Membre | Rôle | GitHub |
 |---|---|---|
 | Aymane TAHANI | Diagramme d'activité, exigences et rédaction du README | [@ayamithn](https://github.com/ayamithn) |
-| Alexandre ALIAS | Diagramme de composants | |
-| Pierre DE JOUVENCEL | Diagramme de cas d'utilisation | |
+| Alexandre ALIAS | Diagramme de composants |@[QLEEEX](https://github.com/QLEEEX) |
+| Pierre DE JOUVENCEL | Diagramme de cas d'utilisation |[@pierrejouvencel08-ship-it
+](https://github.com/pierrejouvencel08-ship-it) |
 | Clément BOUYSSOU | Diagramme de séquence et rédaction du README | [@clement-bsso](https://github.com/clement-bsso) |
 ## 1. EXIGENCES
 
