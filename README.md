@@ -1,5 +1,13 @@
 # LIVRABLE 1 — ANALYSE DU SYSTÈME
 
+## ÉQUIPE
+
+| Membre | Rôle | GitHub |
+|---|---|---|
+| Aymane TAHANI | Diagramme d'activité, exigences et rédaction du README | [@ayamithn](https://github.com/ayamithn) |
+| Alexandre ALIAS | Diagramme de composants | |
+| Pierre DE JOUVENCEL | Diagramme de cas d'utilisation | |
+| Clément BOUYSSOU | Diagramme de séquence et rédaction du README | [@clement-bsso](https://github.com/clement-bsso) |
 ## 1. EXIGENCES
 
 ![Diagramme des exigences.](UML-Diagram/requirement-diagram.png)
