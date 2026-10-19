@@ -1,181 +1,110 @@
-
-#include "board.h"
-#include "setup.h" /**/
-#include "modes.h"
-
+#include "board.h"          // Board_Init, Serial_Print, Delay_ms
+#include "setup.h"          // Global_Init : I2C1 et SPI1
+#include "modes.h"          // boutons, modes, LED, paramètres
 #include "sensor_rtc.h"
 #include "sensor_light.h"
-#include "sensor_bme680.h"/**/
+#include "sensor_bme680.h"
 #include "sensor_gps.h"
 #include "sensor_sd.h"
-
-#include "stm32l4xx_hal.h"
+#include "stm32l4xx_hal.h"  // HAL_GetTick
 #include <stdio.h>
-#include <stdint.h>/**/
-#include <stdbool.h>
 
-// 0 : signalement des erreurs désactivé
-// 1 : signalement des erreurs activé
-#define SIGNALER_ERREURS 0
+// 1 = la LED affiche les erreurs des capteurs (version finale)
+#define SIGNALER_ERREURS  1
+// Passe à 1 quand sensor_sd.c écrit vraiment sur la carte (sinon la LED signalerait une erreur SD en permanence)
+#define SD_IMPLEMENTEE    0
 
-// Mémorise les échecs successifs de chaque capteur
-#if SIGNALER_ERREURS
-static uint8_t echec_rtc = 0;
-static uint8_t echec_gps = 0;
-static uint8_t echec_capteur = 0;
-static uint8_t echec_sd = 0;
-#endif
-
-
-// Calcule le temps entre deux acquisitions
-static uint32_t intervalle_ms(void)
-{
-    uint32_t intervalle =
-        (uint32_t)Modes_Config()->log_interval_s * 1000UL;
-
-    // En mode économique, on espace les mesures
-    if (Modes_Get() == MODE_ECONOMIQUE)
-        intervalle *= 2UL;
-
-    return intervalle;
-}
-
-
-#if SIGNALER_ERREURS
-// Déclare une erreur après deux échecs consécutifs
-static bool en_erreur(uint8_t *compteur, bool acquisition_ok)
-{
-    if (acquisition_ok)
-        *compteur = 0;
-    else if (*compteur < 255)
-        (*compteur)++;
-
-    return (*compteur >= 2);
-}
-#endif
-
-
-// Effectue une acquisition complète et prépare une ligne de données
+// Une acquisition complète : lit les capteurs et enregistre UNE ligne horodatée
 static void faire_mesure(void)
 {
-    static uint8_t compteur_gps = 0;
+  const Config_t *cfg = Modes_Config();
+  char date[24], lumin[16], temp[16], hum[16], pres[16], gps[48], ligne[200];
+  bool capteurs_ok = true;      // false si un capteur activé n'a pas répondu
+  bool incoherent  = false;     // true si une valeur sort des seuils des paramètres
 
-    const Config_t *cfg = Modes_Config();
+  // Par défaut : "NA" (capteur désactivé, ou valeur non prise en compte)
+  snprintf(lumin, sizeof(lumin), "NA");
+  snprintf(temp,  sizeof(temp),  "NA");
+  snprintf(hum,   sizeof(hum),   "NA");
+  snprintf(pres,  sizeof(pres),  "NA");
 
-    char date[24];
-    char lumin[16];
-    char bme[48];
-    char gps[48];
-    char ligne[200];
+  // 1. Date et heure
+  bool rtc_ok = SensorRTC_Acquire(date, sizeof(date));
 
-    // 1. Lire la date et l'heure
-    bool rtc_ok = SensorRTC_Acquire(date, sizeof(date));
+  // 2. Luminosité (paramètre LUMIN)
+  if (cfg->lumin && !SensorLight_Acquire(lumin, sizeof(lumin))) capteurs_ok = false;
 
-    // 2. Lire la luminosité si le capteur est activé
-    bool lum_ok = true;
-
-    if (cfg->lumin)
-        lum_ok = SensorLight_Acquire(lumin, sizeof(lumin));
-    else
-        snprintf(lumin, sizeof(lumin), "NA");
-
-    // 3. Lire la température, l'humidité et la pression
-    bool bme_ok = SensorBME680_Acquire(bme, sizeof(bme));
-
-    // 4. Lire les coordonnées GPS
-    bool gps_ok = true;
-
-    // En mode économique, une lecture GPS sur deux est ignorée
-    if (Modes_Get() == MODE_ECONOMIQUE &&
-        (compteur_gps++ % 2U) == 1U)
-    {
-        snprintf(gps, sizeof(gps), "NA");
+  // 3. BME680 : température, humidité, pression (paramètres TEMP_AIR, HYGR, PRESSURE)
+  if (cfg->temp_air || cfg->hygr || cfg->pressure) {
+    Env_Data env;
+    if (SensorBME680_Read(&env)) {
+      if (cfg->temp_air) {
+        SensorBME680_ValeurEnTexte(env.temperature_c, temp, sizeof(temp));
+        if (env.temperature_c < (float)cfg->min_temp_air ||
+            env.temperature_c > (float)cfg->max_temp_air) incoherent = true;
+      }
+      // Hygrométrie : ignorée hors de la plage de température HYGR_MINT..HYGR_MAXT
+      if (cfg->hygr &&
+          env.temperature_c >= (float)cfg->hygr_mint &&
+          env.temperature_c <= (float)cfg->hygr_maxt) {
+        SensorBME680_ValeurEnTexte(env.humidity_percent, hum, sizeof(hum));
+      }
+      if (cfg->pressure) {
+        SensorBME680_ValeurEnTexte(env.pressure_hpa, pres, sizeof(pres));
+        if (env.pressure_hpa < (float)cfg->pressure_min ||
+            env.pressure_hpa > (float)cfg->pressure_max) incoherent = true;
+      }
+    } else {
+      capteurs_ok = false;
     }
-    else
-    {
-        gps_ok = SensorGPS_Acquire(gps, sizeof(gps));
-    }
+  }
 
-    // 5. Regrouper toutes les données dans une seule ligne
-    snprintf(ligne, sizeof(ligne),
-             "%s;%s;%s;%s\r\n",
-             date, lumin, bme, gps);
+  // 4. GPS (une lecture sur deux en mode économique)
+  bool gps_ok = true;
+  if (Modes_GpsAutorise()) gps_ok = SensorGPS_Acquire(gps, sizeof(gps));
+  else                     snprintf(gps, sizeof(gps), "NA");
 
-    // 6. Enregistrer sur la carte SD si le mode l'autorise
-    bool sd_ok = true;
+  // 5. Une seule ligne avec toutes les mesures
+  snprintf(ligne, sizeof(ligne), "%s;%s;%s;%s;%s;%s\r\n", date, lumin, temp, hum, pres, gps);
 
-    if (Modes_SdAutorisee())
-        sd_ok = SensorSD_WriteLine(ligne);
+  // 6. Enregistrement sur la SD (interdit en mode maintenance) et affichage sur le PC
+  bool sd_ok = true;
+  if (Modes_SdAutorisee()) {
+    bool ecrit = SensorSD_WriteLine(ligne);
+    if (SD_IMPLEMENTEE) sd_ok = ecrit;
+  }
+  Serial_Print(ligne);
 
-    // 7. Afficher les données sur le port série
-    Serial_Print(ligne);
-
-
-#if SIGNALER_ERREURS
-
-    // Vérifier les erreurs après deux échecs consécutifs
-    bool err_rtc = en_erreur(&echec_rtc, rtc_ok);
-    bool err_gps = en_erreur(&echec_gps, gps_ok);
-    bool err_cap = en_erreur(&echec_capteur, lum_ok && bme_ok);
-    bool err_sd  = en_erreur(&echec_sd, sd_ok);
-
-    // Afficher en priorité la première erreur détectée
-    if (err_rtc)
-        Modes_SetErreur(LED_ERR_RTC);
-    else if (err_gps)
-        Modes_SetErreur(LED_ERR_GPS);
-    else if (err_cap)
-        Modes_SetErreur(LED_ERR_CAPTEUR);
-    else if (err_sd)
-        Modes_SetErreur(LED_ERR_SD_ECRITURE);
-    else
-        Modes_ClearErreur();
-
-#endif
+  // 7. LED d'erreur
+  if (SIGNALER_ERREURS) Modes_SuivreErreurs(rtc_ok, gps_ok, capteurs_ok, incoherent, sd_ok);
 }
 
-
-// Fonction principale
 int main(void)
 {
-    // 1. Initialiser la carte et les communications
-    Board_Init();
-    Global_Init();
+  Board_Init();            // HAL, horloge, liaison série
+  Global_Init();           // I2C1 et SPI1
 
-    // 2. Initialiser les capteurs
-    SensorRTC_Init();
-    SensorLight_Init();
-    SensorBME680_Init();
-    SensorGPS_Init();
-    SensorSD_Init();
+  SensorRTC_Init();        // chaque capteur s'initialise lui-même
+  SensorLight_Init();
+  SensorBME680_Init();
+  SensorGPS_Init();
+  SensorSD_Init();
 
-    // 3. Initialiser les modes, les boutons et les LED
-    Modes_Init();
+  Modes_Init();            // paramètres (Flash ou défauts), LED, boutons, mode de départ
 
-    // Permet d'effectuer la première mesure immédiatement
-    uint32_t derniere_mesure =
-        HAL_GetTick() - intervalle_ms();
+  uint32_t derniere = HAL_GetTick() - Modes_IntervalleMs();   // 1re mesure tout de suite
 
-    // 4. Boucle principale du programme
-    while (1)
+  while (1)
+  {
+    Modes_Update();        // boutons, changements de mode, console, LED
+
+    if (Modes_AcquisitionActive() &&
+        (HAL_GetTick() - derniere) >= Modes_IntervalleMs())
     {
-        // Mettre à jour les boutons et le mode actif
-        Modes_Update();
-
-        // Vérifier si les acquisitions sont autorisées
-        // et si le temps prévu entre deux mesures est écoulé
-        if (Modes_AcquisitionActive() &&
-            (HAL_GetTick() - derniere_mesure) >= intervalle_ms())
-        {
-            derniere_mesure = HAL_GetTick();
-
-            faire_mesure();
-        }
-
-        // Attendre brièvement avant de recommencer la boucle
-        if (Modes_Get() == MODE_CONFIGURATION)
-            Delay_ms(1);
-        else
-            Delay_ms(20);
+      derniere = HAL_GetTick();
+      faire_mesure();
     }
+
+    Delay_ms(Modes_Get() == MODE_CONFIGURATION ? 1 : 20);   // écoute plus vite la console en configuration
+  }
 }

@@ -12,7 +12,7 @@ typedef enum {
   MODE_ECONOMIQUE
 } Mode_t;
 
-// Paramètres du système (modifiables en mode configuration)
+// Paramètres du système (modifiables en mode configuration, sauvegardés en Flash)
 typedef struct {
   int32_t log_interval_s;                          // intervalle entre 2 mesures (secondes)
   int32_t file_max_size;                           // taille max d'un fichier de log (octets)
@@ -23,13 +23,18 @@ typedef struct {
   int32_t pressure, pressure_min, pressure_max;    // pression
 } Config_t;
 
-void   Modes_Init(void);                 // LED, boutons, paramètres par défaut, mode de départ
-void   Modes_Update(void);               // à appeler en boucle : boutons, transitions, console, LED
-Mode_t Modes_Get(void);                  // mode actuel
-bool   Modes_AcquisitionActive(void);    // false en mode configuration
-bool   Modes_SdAutorisee(void);          // false en mode maintenance
-void   Modes_SetErreur(LedEtat_t err);   // la LED affiche cette erreur à la place du mode
-void   Modes_ClearErreur(void);          // la LED revient à la couleur du mode
-const Config_t *Modes_Config(void);      // paramètres en lecture seule
+void     Modes_Init(void);                 // paramètres, LED, boutons, mode de départ
+void     Modes_Update(void);               // à appeler en boucle : boutons, transitions, console, LED
+Mode_t   Modes_Get(void);                  // mode actuel
+bool     Modes_AcquisitionActive(void);    // false en mode configuration
+bool     Modes_SdAutorisee(void);          // false en mode maintenance
+const Config_t *Modes_Config(void);        // paramètres en lecture seule
+uint32_t Modes_IntervalleMs(void);         // temps entre 2 mesures (doublé en mode économique)
+bool     Modes_GpsAutorise(void);          // false une fois sur deux en mode économique
+
+// À appeler après chaque mesure : la LED affiche l'erreur la plus prioritaire
+void Modes_SuivreErreurs(bool rtc_ok, bool gps_ok, bool capteurs_ok, bool incoherent, bool sd_ok);
+void Modes_SetErreur(LedEtat_t err);       // la LED affiche cette erreur à la place du mode
+void Modes_ClearErreur(void);              // la LED revient à la couleur du mode
 
 #endif
