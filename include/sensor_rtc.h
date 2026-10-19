@@ -4,7 +4,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-bool SensorRTC_Init(void);                        // initialise le capteur
-bool SensorRTC_Acquire(char *out, size_t size);   // ecrit la valeur en texte dans out ("NA" si echec)
-                                           // renvoie true si la mesure est valide
+bool SensorRTC_Init(void);                        // initialise l'horloge RTC
+bool SensorRTC_Acquire(char *out, size_t size);   // écrit "AAAA-MM-JJ HH:MM:SS" dans out ("NA" si échec)
+                                                  // renvoie true si la date lue est valide
+bool SensorRTC_FileDate(char *out, size_t size);  // écrit "AAMMJJ" (ex : "261019") pour nommer le fichier .LOG
+                                                  // renvoie true si la date lue est valide
 #endif
