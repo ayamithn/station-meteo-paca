@@ -4,7 +4,8 @@
 
 bool SensorGPS_Init(void)
 {
-    return GroveGPS_Init();
+    GroveGPS_Init();
+    return true; // ou vérifiez si l'initialisation a réussi si votre code le permet
 }
 
 bool SensorGPS_Acquire(char *out, size_t size)
