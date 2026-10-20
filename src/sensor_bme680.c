@@ -323,7 +323,7 @@ bool SensorBME680_Acquire(char *out, size_t size)
   SensorBME680_ValeurEnTexte(mesure.temperature_c, temp, sizeof(temp));
   SensorBME680_ValeurEnTexte(mesure.humidity_percent, hum, sizeof(hum));
   SensorBME680_ValeurEnTexte(mesure.pressure_hpa, pres, sizeof(pres));
-
+  
   snprintf(out, size, "%s;%s;%s", temp, hum, pres);
   return true;
 }
