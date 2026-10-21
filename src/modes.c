@@ -8,7 +8,7 @@
 #include <string.h>
 
 // ===================== RÉGLAGES =====================
-#define TEST_RAPIDE            0      // 1 = une mesure toutes les 5 s par défaut (tests) ; 0 = 10 min (version finale)
+#define TEST_RAPIDE            1     // 1 = une mesure toutes les 5 s par défaut (tests) ; 0 = 10 min (version finale)
 #define DUREE_APPUI_LONG_MS    5000UL                   // appui de 5 secondes (document)
 #define TIMEOUT_CONFIG_MS      (30UL * 60UL * 1000UL)   // 30 min sans activité
 #define TEST_CARTE_SEULE       0      // 1 = le bouton bleu B1 de la carte joue le bouton rouge
