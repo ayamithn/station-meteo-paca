@@ -16,14 +16,14 @@
  *   2. COUCHE FAT : retrouver un fichier par son nom, ajouter des octets a la fin
  *      (une carte formatee en FAT32 contient une table qui dit, pour chaque morceau
  *      de la carte ("cluster"), quel est le morceau suivant du fichier)
- *   3. COUCHE CAPTEUR : fabriquer le nom du jour (AAMMJJ_0.LOG), archiver le fichier
+ *   3. COUCHE CAPTEUR : fabriquer le nom du jour (AAMMJJ_0.CSV), archiver le fichier
  *      quand il est plein (sd_archive.c), puis ajouter la ligne
  *
  * La taille du fichier est mise a jour a CHAQUE ecriture : la carte peut donc etre
  * retiree entre deux mesures sans corrompre le fichier.
  *
  * Limites : carte formatee en FAT32 (32 Go maximum), fichiers dans le dossier
- * racine, noms courts 8.3 (ex : 200531_0.LOG).
+ * racine, noms courts 8.3 (ex : 200531_0.CSV).
  */
  
 extern SPI_HandleTypeDef SD_SPI_HANDLE;   // meme handle que le pilote du prof (spi1, setup.c)
@@ -272,7 +272,7 @@ static bool caractere_valide(uint8_t c)
  
 static uint8_t majuscule(char c) { return (uint8_t)((c >= 'a' && c <= 'z') ? c - 32 : c); }
  
-// "200531_0.LOG" -> "200531_0LOG" (11 caracteres, majuscules, complete par des espaces)
+// "200531_0.CSV" -> "200531_0CSV" (11 caracteres, majuscules, complete par des espaces)
 static bool nom_83(const char *nom, uint8_t out[11])
 {
   if (nom == NULL) return false;
@@ -735,7 +735,7 @@ static FatEtat fat_renommer(const char *ancien_nom, const char *nouveau_nom)
 static uint16_t derniere_annee = 0;
 static uint8_t  dernier_mois = 0, dernier_jour = 0;
  
-// Ecrit le nom du fichier du jour dans nom (13 octets) : "AAMMJJ_0.LOG"
+// Ecrit le nom du fichier du jour dans nom (13 octets) : "AAMMJJ_0.CSV"
 static void nom_du_jour(char *nom)
 {
   RTC_DateTime now;
@@ -748,7 +748,7 @@ static void nom_du_jour(char *nom)
     fat_regler_heure(now.year, now.month, now.day, now.hours, now.minutes, now.seconds);
   }
  
-  snprintf(nom, 13, "%02u%02u%02u_0.LOG",
+  snprintf(nom, 13, "%02u%02u%02u_0.CSV",
            (unsigned)(derniere_annee % 100U), (unsigned)(dernier_mois % 100U), (unsigned)(dernier_jour % 100U));
 }
  

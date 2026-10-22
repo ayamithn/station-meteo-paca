@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 bool SensorSD_Init(void);                      // initialise la carte SD
-bool SensorSD_WriteLine(const char *ligne);    // ajoute la ligne dans AAMMJJ_0.LOG (la ligne doit finir par '\n')
+bool SensorSD_WriteLine(const char *ligne);    // ajoute la ligne dans AAMMJJ_0.CSV (la ligne doit finir par '\n')
 
 // Utilises par sd_archive.c pour archiver un fichier plein
 bool SensorSD_FileExists(const char *nom);                              // le fichier existe-t-il sur la carte ?

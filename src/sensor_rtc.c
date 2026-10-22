@@ -160,7 +160,7 @@ bool SensorRTC_Acquire(char *out, size_t size)
 }
 
 // ---------------------------------------------------------------
-// 4. Date pour le nom du fichier : AAMMJJ (ex : 261019 -> 261019_0.LOG)
+// 4. Date pour le nom du fichier : AAMMJJ (ex : 261019 -> 261019_0.CSV)
 //    Sert à celui qui code la carte SD
 // ---------------------------------------------------------------
 bool SensorRTC_FileDate(char *out, size_t size)
