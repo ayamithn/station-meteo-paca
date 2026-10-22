@@ -105,10 +105,7 @@ static void cycle_mesure(void)
 
   // 6. Affichage série (tous les modes sauf configuration, qui ne passe jamais ici)
   Serial_Print(ligne);
-  if (c->lumin && lum_ok) {
-    snprintf(msg, sizeof(msg), "  Luminosite : %s\r\n", niveau_lumiere(atoi(lum), c));
-    Serial_Print(msg);
-  }
+  
 
   // 7. Enregistrement SD : interdit en maintenance (la carte peut être retirée)
   if (Modes_SdAutorisee()) {

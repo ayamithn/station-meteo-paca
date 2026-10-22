@@ -17,7 +17,7 @@
 #if TEST_RAPIDE
   #define LOG_INTERVAL_DEFAUT_S  2
 #else
-  #define LOG_INTERVAL_DEFAUT_S  6
+  #define LOG_INTERVAL_DEFAUT_S  4
 #endif
 
 #if TEST_CARTE_SEULE
@@ -53,7 +53,7 @@ static void config_defauts(void)
 {
   cfg.log_interval_s = LOG_INTERVAL_DEFAUT_S;
   cfg.file_max_size  = 2048;
-  cfg.timeout_s      = 2;
+  cfg.timeout_s      = 5;
   cfg.lumin = 1;     cfg.lumin_low = 255;    cfg.lumin_high = 768;
   cfg.temp_air = 1;  cfg.min_temp_air = -10; cfg.max_temp_air = 60;
   cfg.hygr = 1;      cfg.hygr_mint = 0;      cfg.hygr_maxt = 50;
