@@ -208,12 +208,12 @@ La configuration de la carte et du port série se trouve dans
 - Document « A2 – Projet Système embarqué – Modes de fonctionnement ».
 - [Documentation PlatformIO](https://docs.platformio.org/).
 - [Documentation UML](https://lucid.co/fr/diagramme/uml).
-
+- LLM pour la reformulation et la correction syntaxique.
 ## Équipe
 
 | Membre | Rôle | GitHub |
 |---|---|---|
-| Aymane TAHANI | Diagrammes d'activité et d'exigences, rédaction | [@ayamithn](https://github.com/ayamithn) |
-| Alexandre ALIAS | Diagramme de composants | [@QLEEEX](https://github.com/QLEEEX) |
+| Aymane TAHANI | Diagrammes d'activité et d'exigences, rédaction livrable 1 & 4 | [@ayamithn](https://github.com/ayamithn) |
+| Alexandre ALIAS | | [@QLEEEX](https://github.com/QLEEEX) |
 | Pierre DE JOUVENCEL | Diagramme de cas d'utilisation | [@pierrejouvencel08-ship-it](https://github.com/pierrejouvencel08-ship-it) |
-| Clément BOUYSSOU | Diagramme de séquence, rédaction | [@clement-bsso](https://github.com/clement-bsso) |
+| Clément BOUYSSOU | Diagramme de séquence, rédaction livrable 1 | [@clement-bsso](https://github.com/clement-bsso) |
