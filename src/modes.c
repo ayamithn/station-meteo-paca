@@ -1,23 +1,23 @@
 #include "modes.h"
 #include "board.h"                // Serial_Print
 #include "grove_button.h"         // pilote du prof (Grove Dual Button sur D2)
-#include "grove_rtc_ds1307.h"     // commandes CLOCK, DATE, DAY
+#include "sensor_rtc.h"           // commandes CLOCK, DATE, DAY (RTC ou horloge logicielle)
 #include "stm32l4xx_hal.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 // ===================== RÉGLAGES =====================
-#define TEST_RAPIDE            1     // 1 = une mesure toutes les 5 s par défaut (tests) ; 0 = 10 min (version finale)
+#define TEST_RAPIDE            0      // 1 = une mesure toutes les 5 s par défaut (tests) ; 0 = 10 min (version finale)
 #define DUREE_APPUI_LONG_MS    5000UL                   // appui de 5 secondes (document)
 #define TIMEOUT_CONFIG_MS      (30UL * 60UL * 1000UL)   // 30 min sans activité
 #define TEST_CARTE_SEULE       0      // 1 = le bouton bleu B1 de la carte joue le bouton rouge
 #define BOUTONS_INVERSES       0      // 1 si "appuyé" est lu au repos (logique inversée)
 
 #if TEST_RAPIDE
-  #define LOG_INTERVAL_DEFAUT_S  5
+  #define LOG_INTERVAL_DEFAUT_S  2
 #else
-  #define LOG_INTERVAL_DEFAUT_S  600
+  #define LOG_INTERVAL_DEFAUT_S  6
 #endif
 
 #if TEST_CARTE_SEULE
@@ -53,7 +53,7 @@ static void config_defauts(void)
 {
   cfg.log_interval_s = LOG_INTERVAL_DEFAUT_S;
   cfg.file_max_size  = 2048;
-  cfg.timeout_s      = 30;
+  cfg.timeout_s      = 2;
   cfg.lumin = 1;     cfg.lumin_low = 255;    cfg.lumin_high = 768;
   cfg.temp_air = 1;  cfg.min_temp_air = -10; cfg.max_temp_air = 60;
   cfg.hygr = 1;      cfg.hygr_mint = 0;      cfg.hygr_maxt = 50;
@@ -186,7 +186,11 @@ static void traiter_commande(char *cmd)
   // --- Horloge : CLOCK=HH:MM:SS, DATE=MOIS,JOUR,ANNEE, DAY=MON..SUN (gardée par la RTC) ---
   if (strcmp(nom, "CLOCK") == 0 || strcmp(nom, "DATE") == 0 || strcmp(nom, "DAY") == 0) {
     RTC_DateTime t;
-    if (!GroveRTC_GetDateTime(&t)) { Serial_Print("Erreur : RTC injoignable\r\n"); return; }
+    if (!SensorRTC_GetDateTime(&t)) {
+      // Pas de RTC et horloge jamais réglée : on part du 01/01/2000 00:00:00 (samedi)
+      t.seconds = 0; t.minutes = 0; t.hours = 0; t.dayOfWeek = 6;
+      t.day = 1; t.month = 1; t.year = 2000;
+    }
     long a, b, c;
 
     if (strcmp(nom, "CLOCK") == 0) {
@@ -206,7 +210,7 @@ static void traiter_commande(char *cmd)
       if (j < 0) { Serial_Print("Format : DAY=MON, TUE, WED, THU, FRI, SAT ou SUN\r\n"); return; }
       t.dayOfWeek = (uint8_t)(j + 1);     // 1 = lundi ... 7 = dimanche
     }
-    Serial_Print(GroveRTC_SetDateTime(&t) ? "OK\r\n" : "Erreur d'ecriture RTC\r\n");
+    Serial_Print(SensorRTC_SetDateTime(&t) ? "OK\r\n" : "Erreur d'ecriture RTC\r\n");
     return;
   }
 

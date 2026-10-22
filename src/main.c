@@ -134,13 +134,14 @@ int main(void)
   Modes_Init();      // paramètres, LED, boutons ; bouton rouge pressé = configuration
 
   bool rtc  = SensorRTC_Init();
+  if (!rtc) SensorRTC_SetFromBuild(__DATE__, __TIME__);   // pas de RTC : heure de compilation
   bool bme  = SensorBME680_Init();
   bool lum  = SensorLight_Init();
   bool gps  = SensorGPS_Init();
   bool sd   = SensorSD_Init();
 
   Serial_Print("\r\n=== Station meteo PACA ===\r\n");
-  Serial_Print(rtc ? "RTC : OK\r\n" : "RTC : ERREUR\r\n");
+  Serial_Print(rtc ? "RTC : OK\r\n" : "RTC : absente -> heure de compilation\r\n");
   Serial_Print(bme ? "BME680 : OK\r\n" : "BME680 : ERREUR\r\n");
   Serial_Print(lum ? "Lumiere : OK\r\n" : "Lumiere : ERREUR\r\n");
   Serial_Print(gps ? "GPS : initialise\r\n" : "GPS : ERREUR\r\n");
