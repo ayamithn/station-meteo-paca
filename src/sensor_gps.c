@@ -1,27 +1,18 @@
 #include "sensor_gps.h"
-#include "grove_gps_air530z.h"   // pilote du prof : GroveGPS_Init() et GroveGPS_ReadGGA()
+#include "grove_gps_air530z.h"
 #include "board_pins.h"
-#include "modes.h"               // Modes_Config()->timeout_s (paramètre TIMEOUT) et Modes_Update()
+#include "modes.h"
 #include "stm32l4xx_hal.h"
 #include <stdio.h>
 #include <string.h>
 
-/*
- * PRINCIPE (à expliquer à l'oral) :
- * Le GPS envoie en continu des lignes de texte (trames NMEA). Celle qui contient
- * la position s'appelle GGA. Le pilote du prof sait la lire (GroveGPS_ReadGGA),
- * mais il ne vérifie pas qu'elle est correcte. Ce fichier ajoute :
- *   1. l'attente d'un "fix" (position valide) pendant TIMEOUT secondes au maximum
- *   2. la vérification de la trame (checksum + coordonnées plausibles)
- *   3. la mise en forme "latitude,longitude", ou "NA" en cas d'échec
- * (code de Pierre ; Modes_Update() ajouté dans la boucle d'attente)
- */
 
-// Le pilote du prof définit ce handle (même principe que GROVE_I2C_HANDLE pour l'I2C)
+
+
 extern UART_HandleTypeDef GPS_UART_HANDLE;
 
 
-/* ---------- Vérification d'une trame ---------- */
+
 
 static int valeur_hexa(char c)
 {
@@ -31,8 +22,8 @@ static int valeur_hexa(char c)
   return -1;
 }
 
-// Une trame NMEA se termine par "*XY" : XY = XOR (en hexadécimal) de tout ce qui
-// est entre '$' et '*'. Si le résultat est différent, la trame est abîmée.
+
+
 static bool checksum_correct(const char *trame)
 {
   if (trame[0] != '$') return false;
@@ -61,21 +52,21 @@ static bool position_plausible(const GPS_Data *gps)
 }
 
 
-/* ---------- Mise en forme ---------- */
 
-// Écrit un angle avec 6 décimales (ex : -6.505620) sans utiliser "%f" de snprintf
-// (absent de la bibliothèque allégée sur STM32, comme pour le BME680).
+
+
+
 static void angle_en_texte(double valeur, char *out, size_t taille)
 {
   double absolu = (valeur < 0.0) ? -valeur : valeur;
-  int32_t micro = (int32_t)(absolu * 1000000.0 + 0.5);   // millionièmes de degré
+  int32_t micro = (int32_t)(absolu * 1000000.0 + 0.5);
   const char *signe = (valeur < 0.0 && micro != 0) ? "-" : "";
 
   snprintf(out, taille, "%s%ld.%06ld", signe, (long)(micro / 1000000), (long)(micro % 1000000));
 }
 
-// Vide l'UART avant d'écouter : efface un éventuel dépassement (octets perdus
-// pendant les minutes sans lecture) et jette l'octet qui attendait.
+
+
 static void vider_uart(void)
 {
   uint8_t c;
@@ -83,21 +74,21 @@ static void vider_uart(void)
   __HAL_UART_CLEAR_OREFLAG(&GPS_UART_HANDLE);
   while (HAL_UART_Receive(&GPS_UART_HANDLE, &c, 1, 0) == HAL_OK)
   {
-    // octet ignoré
+
   }
   __HAL_UART_CLEAR_OREFLAG(&GPS_UART_HANDLE);
 }
 
 
-/* ---------- Fonctions publiques ---------- */
+
 
 bool SensorGPS_Init(void)
 {
-  GroveGPS_Init();   // configure UART4 ; les broches sont réglées dans setup.c (HAL_UART_MspInit)
-  return true;       // le pilote du prof ne renvoie pas de résultat : on ne peut pas vérifier ici
+  GroveGPS_Init();
+  return true;
 }
 
-// Écrit "latitude,longitude" dans out, ou "NA" si pas de position avant le TIMEOUT
+
 bool SensorGPS_Acquire(char *out, size_t size)
 {
   if (out == NULL || size == 0) return false;
@@ -108,14 +99,14 @@ bool SensorGPS_Acquire(char *out, size_t size)
 
   vider_uart();
 
-  // On lit des trames GGA jusqu'à en obtenir une valide, ou jusqu'au TIMEOUT.
-  // (Sans fix, GroveGPS_ReadGGA renvoie false : on recommence avec la trame suivante.)
+
+
   while (1)
   {
     uint32_t ecoule = HAL_GetTick() - debut;
     if (ecoule >= timeout_ms) break;
 
-    Modes_Update();   // garde les boutons, la LED et la console actifs pendant l'attente
+    Modes_Update();
 
     memset(&gps, 0, sizeof(gps));
 
@@ -130,7 +121,7 @@ bool SensorGPS_Acquire(char *out, size_t size)
 
       int n = snprintf(out, size, "%s,%s", lat, lon);
       if (n > 0 && (size_t)n < size) return true;
-      break;   // buffer trop petit : on le signale par "NA"
+      break;
     }
   }
 

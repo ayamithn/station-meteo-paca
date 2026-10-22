@@ -40,7 +40,7 @@ void Delay_ms(int ms)
     HAL_Delay(ms);
 }
 
-/* Interruption SysTick utilisée par HAL_Delay() */
+
 void SysTick_Handler(void)
 {
     HAL_IncTick();
@@ -69,7 +69,7 @@ static void MX_USART2_UART_Init(void)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     huart2.Instance = USART2;
-    huart2.Init.BaudRate = 115200; //Attention, doit être identique à la configuration de platformio.ini
+    huart2.Init.BaudRate = 115200;
     huart2.Init.WordLength = UART_WORDLENGTH_8B;
     huart2.Init.StopBits = UART_STOPBITS_1;
     huart2.Init.Parity = UART_PARITY_NONE;

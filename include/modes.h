@@ -12,29 +12,29 @@ typedef enum {
   MODE_ECONOMIQUE
 } Mode_t;
 
-// Paramètres du système (modifiables en mode configuration, sauvegardés en Flash)
+
 typedef struct {
-  int32_t log_interval_s;                          // intervalle entre 2 mesures (secondes)
-  int32_t file_max_size;                           // taille max d'un fichier de log (octets)
-  int32_t timeout_s;                               // timeout d'un capteur (secondes)
-  int32_t lumin, lumin_low, lumin_high;            // luminosité
-  int32_t temp_air, min_temp_air, max_temp_air;    // température de l'air
-  int32_t hygr, hygr_mint, hygr_maxt;              // hygrométrie
-  int32_t pressure, pressure_min, pressure_max;    // pression
+  int32_t log_interval_s;
+  int32_t file_max_size;
+  int32_t timeout_s;
+  int32_t lumin, lumin_low, lumin_high;
+  int32_t temp_air, min_temp_air, max_temp_air;
+  int32_t hygr, hygr_mint, hygr_maxt;
+  int32_t pressure, pressure_min, pressure_max;
 } Config_t;
 
-void     Modes_Init(void);                 // paramètres, LED, boutons, mode de départ
-void     Modes_Update(void);               // à appeler en boucle : boutons, transitions, console, LED
-Mode_t   Modes_Get(void);                  // mode actuel
-bool     Modes_AcquisitionActive(void);    // false en mode configuration
-bool     Modes_SdAutorisee(void);          // false en mode maintenance
-const Config_t *Modes_Config(void);        // paramètres en lecture seule
-uint32_t Modes_IntervalleMs(void);         // temps entre 2 mesures (doublé en mode économique)
-bool     Modes_GpsAutorise(void);          // false une fois sur deux en mode économique
+void     Modes_Init(void);
+void     Modes_Update(void);
+Mode_t   Modes_Get(void);
+bool     Modes_AcquisitionActive(void);
+bool     Modes_SdAutorisee(void);
+const Config_t *Modes_Config(void);
+uint32_t Modes_IntervalleMs(void);
+bool     Modes_GpsAutorise(void);
 
-// À appeler après chaque mesure : la LED affiche l'erreur la plus prioritaire
+
 void Modes_SuivreErreurs(bool rtc_ok, bool gps_ok, bool capteurs_ok, bool incoherent, bool sd_ok);
-void Modes_SetErreur(LedEtat_t err);       // la LED affiche cette erreur à la place du mode
-void Modes_ClearErreur(void);              // la LED revient à la couleur du mode
+void Modes_SetErreur(LedEtat_t err);
+void Modes_ClearErreur(void);
 
 #endif

@@ -11,22 +11,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
- * MAIN : boucle principale de la station (document "Modes de fonctionnement")
- *
- *  - STANDARD       : mesure tous les LOG_INTERVAL, ligne horodatée -> carte SD + port série
- *  - CONFIGURATION  : pas de mesure, la console est gérée par modes.c
- *  - MAINTENANCE    : mesure + affichage série, RIEN n'est écrit sur la SD
- *  - ECONOMIQUE     : intervalle x2 et GPS une mesure sur deux (géré par modes.c)
- *
- * Format d'une ligne (séparateur ';', une ligne par mesure) :
- *   AAAA-MM-JJ HH:MM:SS;latitude,longitude;température;humidité;pression;gaz;luminosité
- * Une valeur absente ou en erreur est écrite "NA".
- */
+
 
 #define BME_NA   "NA"
 
-// Limites physiques du BME680 : au-delà, la valeur est incohérente (câblage / capteur à vérifier)
+
 #define BME_TEMP_MIN   (-40.0f)
 #define BME_TEMP_MAX   (85.0f)
 #define BME_HUM_MIN    (0.0f)
@@ -41,7 +30,7 @@ static const char *niveau_lumiere(int valeur, const Config_t *c)
   return "MOYENNE";
 }
 
-// Une mesure complète : lit les capteurs, fabrique la ligne, l'affiche et l'enregistre
+
 static void cycle_mesure(void)
 {
   const Config_t *c = Modes_Config();
@@ -58,14 +47,14 @@ static void cycle_mesure(void)
   bool sd_ok = true;
   bool sd_ecrite = false;
 
-  // 1. Horodatage (RTC) : "NA" si la RTC ne répond pas
+
   rtc_ok = SensorRTC_Acquire(date, sizeof(date));
 
-  // 2. GPS : en mode économique, une mesure sur deux seulement.
-  //    Quand le GPS est sauté, ce n'est pas une erreur : la valeur est "NA".
+
+
   if (Modes_GpsAutorise()) gps_ok = SensorGPS_Acquire(gps, sizeof(gps));
 
-  // 3. BME680 (température, humidité, pression), selon les paramètres activés
+
   if (c->temp_air || c->hygr || c->pressure) {
     Env_Data e;
     if (SensorBME680_Read(&e)) {
@@ -75,7 +64,7 @@ static void cycle_mesure(void)
             e.temperature_c < (float)c->min_temp_air || e.temperature_c > (float)c->max_temp_air)
           incoherent = true;
       }
-      // Hygrométrie ignorée si la température est hors de [HYGR_MINT ; HYGR_MAXT]
+
       if (c->hygr && e.temperature_c >= (float)c->hygr_mint && e.temperature_c <= (float)c->hygr_maxt) {
         SensorBME680_ValeurEnTexte(e.humidity_percent, hum, sizeof(hum));
         if (e.humidity_percent < BME_HUM_MIN || e.humidity_percent > BME_HUM_MAX) incoherent = true;
@@ -89,11 +78,11 @@ static void cycle_mesure(void)
       if (e.gas_resistance_ohm > 0.0f)
         SensorBME680_ValeurEnTexte(e.gas_resistance_ohm, gaz, sizeof(gaz));
     } else {
-      bme_ok = false;   // les 4 valeurs restent "NA"
+      bme_ok = false;
     }
   }
 
-  // 4. Luminosité
+
   if (c->lumin) {
     lum_ok = SensorLight_Acquire(lum, sizeof(lum));
     if (lum_ok) {
@@ -102,17 +91,17 @@ static void cycle_mesure(void)
     }
   }
 
-  // 5. Une seule ligne horodatée
+
   snprintf(ligne, sizeof(ligne), "%s;%s;%s;%s;%s;%s;%s\r\n",
            date, gps, temp, hum, pres, gaz, lum);
 
-  // 6. Affichage série (tous les modes sauf configuration, qui ne passe jamais ici)
-  Serial_Print(ligne);
-  
 
-  // 7. Enregistrement SD : interdit en maintenance (la carte peut être retirée)
+  Serial_Print(ligne);
+
+
+
   if (Modes_SdAutorisee()) {
-    // sur la carte, la ligne se termine par '\n' (le "\r" n'est utile que sur le terminal)
+
     char ligne_sd[192];
     snprintf(ligne_sd, sizeof(ligne_sd), "%s;%s;%s;%s;%s;%s;%s\n",
              date, gps, temp, hum, pres, gaz, lum);
@@ -124,18 +113,18 @@ static void cycle_mesure(void)
   }
   (void)sd_ecrite;
 
-  // 8. Signalisation LED des erreurs (le document : erreur après 2 échecs de suite, géré dans modes.c)
+
   Modes_SuivreErreurs(rtc_ok, gps_ok, bme_ok && lum_ok, incoherent, sd_ok);
 }
 
 int main(void)
 {
-  Board_Init();      // HAL, UART2 (console PC)
-  Global_Init();     // I2C1 (RTC, BME680) et SPI1 (SD)
-  Modes_Init();      // paramètres, LED, boutons ; bouton rouge pressé = configuration
+  Board_Init();
+  Global_Init();
+  Modes_Init();
 
   bool rtc  = SensorRTC_Init();
-  if (!rtc) SensorRTC_SetFromBuild(__DATE__, __TIME__);   // pas de RTC : heure de compilation
+  if (!rtc) SensorRTC_SetFromBuild(__DATE__, __TIME__);
   bool bme  = SensorBME680_Init();
   bool lum  = SensorLight_Init();
   bool gps  = SensorGPS_Init();
@@ -155,21 +144,21 @@ int main(void)
 
   while (1)
   {
-    Modes_Update();                      // boutons, changements de mode, console, LED
+    Modes_Update();
 
     Mode_t mode = Modes_Get();
-    if (mode != mode_vu) {               // changement de mode : on repart d'une mesure immédiate
+    if (mode != mode_vu) {
       mode_vu = mode;
       mesure_faite = false;
     }
 
-    if (!Modes_AcquisitionActive()) {    // mode configuration : capteurs désactivés
+    if (!Modes_AcquisitionActive()) {
       mesure_faite = false;
       continue;
     }
 
     if (!mesure_faite || (HAL_GetTick() - derniere_mesure) >= Modes_IntervalleMs()) {
-      cycle_mesure();                    // peut durer jusqu'à TIMEOUT s (GPS)
+      cycle_mesure();
       derniere_mesure = HAL_GetTick();
       mesure_faite = true;
     }
