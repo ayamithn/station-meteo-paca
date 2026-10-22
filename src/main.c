@@ -20,7 +20,7 @@
  *  - ECONOMIQUE     : intervalle x2 et GPS une mesure sur deux (géré par modes.c)
  *
  * Format d'une ligne (séparateur ';', une ligne par mesure) :
- *   AAAA-MM-JJ HH:MM:SS;latitude,longitude;température;humidité;pression;luminosité
+ *   AAAA-MM-JJ HH:MM:SS;latitude,longitude;température;humidité;pression;gaz;luminosité
  * Une valeur absente ou en erreur est écrite "NA".
  */
 
@@ -49,9 +49,9 @@ static void cycle_mesure(void)
   char date[24]  = "NA";
   char gps[40]   = "NA";
   char temp[16]  = BME_NA, hum[16] = BME_NA, pres[16] = BME_NA;
+  char gaz[16]   = BME_NA;
   char lum[16]   = "NA";
-  char ligne[160];
-  char msg[200];
+  char ligne[192];
 
   bool rtc_ok = true, gps_ok = true, bme_ok = true, lum_ok = true;
   bool incoherent = false;
@@ -86,8 +86,10 @@ static void cycle_mesure(void)
             e.pressure_hpa < (float)c->pressure_min || e.pressure_hpa > (float)c->pressure_max)
           incoherent = true;
       }
+      if (e.gas_resistance_ohm > 0.0f)
+        SensorBME680_ValeurEnTexte(e.gas_resistance_ohm, gaz, sizeof(gaz));
     } else {
-      bme_ok = false;   // les 3 valeurs restent "NA"
+      bme_ok = false;   // les 4 valeurs restent "NA"
     }
   }
 
@@ -101,7 +103,8 @@ static void cycle_mesure(void)
   }
 
   // 5. Une seule ligne horodatée
-  snprintf(ligne, sizeof(ligne), "%s;%s;%s;%s;%s;%s\r\n", date, gps, temp, hum, pres, lum);
+  snprintf(ligne, sizeof(ligne), "%s;%s;%s;%s;%s;%s;%s\r\n",
+           date, gps, temp, hum, pres, gaz, lum);
 
   // 6. Affichage série (tous les modes sauf configuration, qui ne passe jamais ici)
   Serial_Print(ligne);
@@ -110,8 +113,9 @@ static void cycle_mesure(void)
   // 7. Enregistrement SD : interdit en maintenance (la carte peut être retirée)
   if (Modes_SdAutorisee()) {
     // sur la carte, la ligne se termine par '\n' (le "\r" n'est utile que sur le terminal)
-    char ligne_sd[160];
-    snprintf(ligne_sd, sizeof(ligne_sd), "%s;%s;%s;%s;%s;%s\n", date, gps, temp, hum, pres, lum);
+    char ligne_sd[192];
+    snprintf(ligne_sd, sizeof(ligne_sd), "%s;%s;%s;%s;%s;%s;%s\n",
+             date, gps, temp, hum, pres, gaz, lum);
     sd_ok = SensorSD_WriteLine(ligne_sd);
     sd_ecrite = sd_ok;
     if (!sd_ok) Serial_Print("  ERREUR : ecriture SD impossible\r\n");
@@ -143,7 +147,7 @@ int main(void)
   Serial_Print(lum ? "Lumiere : OK\r\n" : "Lumiere : ERREUR\r\n");
   Serial_Print(gps ? "GPS : initialise\r\n" : "GPS : ERREUR\r\n");
   Serial_Print(sd  ? "SD : OK\r\n" : "SD : absente ou illisible (nouvel essai a chaque mesure)\r\n");
-  Serial_Print("Format : date;lat,lon;temp;hum;pression;luminosite\r\n");
+  Serial_Print("Format : date;lat,lon;temp;hum;pression;gaz;luminosite\r\n");
 
   uint32_t derniere_mesure = 0;
   bool     mesure_faite    = false;

@@ -14,8 +14,9 @@ bool SensorBME680_Init(void);
 // Note : gas_resistance_ohm vaut 0 tant que le capteur de gaz n'a pas de valeur valide.
 bool SensorBME680_Read(Env_Data *data);
 
-// Fait une mesure et écrit le résultat en texte dans out : "température;humidité;pression"
-// (exemple : "21.4;48.2;1013.2"). Si la mesure échoue, écrit "NA;NA;NA".
+// Fait une mesure et écrit le résultat en texte dans out :
+// "température;humidité;pression;gaz"
+// (exemple : "21.4;48.2;1013.2;12500.0"). Si la mesure échoue, écrit "NA;NA;NA;NA".
 // Renvoie true si la mesure est valide. (Appelée par main.c du projet)
 bool SensorBME680_Acquire(char *out, size_t size);
 

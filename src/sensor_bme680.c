@@ -312,18 +312,22 @@ void SensorBME680_ValeurEnTexte(float valeur, char *out, size_t taille)
 bool SensorBME680_Acquire(char *out, size_t size)
 {
   Env_Data mesure;
-  char temp[16], hum[16], pres[16];
+  char temp[16], hum[16], pres[16], gaz[16];
 
   if (!SensorBME680_Read(&mesure))
   {
-    snprintf(out, size, "NA;NA;NA");
+    snprintf(out, size, "NA;NA;NA;NA");
     return false;
   }
 
   SensorBME680_ValeurEnTexte(mesure.temperature_c, temp, sizeof(temp));
   SensorBME680_ValeurEnTexte(mesure.humidity_percent, hum, sizeof(hum));
   SensorBME680_ValeurEnTexte(mesure.pressure_hpa, pres, sizeof(pres));
+  if (mesure.gas_resistance_ohm > 0.0f)
+    SensorBME680_ValeurEnTexte(mesure.gas_resistance_ohm, gaz, sizeof(gaz));
+  else
+    snprintf(gaz, sizeof(gaz), "NA");
   
-  snprintf(out, size, "%s;%s;%s", temp, hum, pres);
+  snprintf(out, size, "%s;%s;%s;%s", temp, hum, pres, gaz);
   return true;
 }
