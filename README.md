@@ -195,12 +195,12 @@ La configuration de la carte et du port série se trouve dans
 
 ## Diagrammes UML
 
-- [Diagramme des exigences](UML-Diagram/requirement-diagram.png)
-- [Diagramme des cas d'utilisation](UML-Diagram/use-case-diagram.png)
+- [Diagramme des exigences](livrable-1/UML-Diagram/requirement-diagram.png)
+- [Diagramme des cas d'utilisation](livrable-1/UML-Diagram/use-case-diagram.png)
 - [Diagramme d'activité](UML-Diagram/activity-diagram.png)
-- [Diagramme de composants](UML-Diagram/component-diagram.png)
-- [Diagramme de séquence](UML-Diagram/sequence-diagram.png)
-- [Signalisation LED](UML-Diagram/RGB-LED-signaling.png)
+- [Diagramme de composants](livrable-1/UML-Diagram/component-diagram.png)
+- [Diagramme de séquence](livrable-1/UML-Diagram/sequence-diagram.png)
+- [Signalisation LED](livrable-1/UML-Diagram/RGB-LED-signaling.png)
 
 ## Références
 
