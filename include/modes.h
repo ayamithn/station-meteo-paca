@@ -12,7 +12,7 @@ typedef enum {
   MODE_ECONOMIQUE
 } Mode_t;
 
-
+// Parametres modifiables depuis le mode configuration.
 typedef struct {
   int32_t log_interval_s;
   int32_t file_max_size;
@@ -23,6 +23,7 @@ typedef struct {
   int32_t pressure, pressure_min, pressure_max;
 } Config_t;
 
+// Gestion generale des modes et de leur configuration.
 void     Modes_Init(void);
 void     Modes_Update(void);
 Mode_t   Modes_Get(void);

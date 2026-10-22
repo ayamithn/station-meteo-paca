@@ -20,6 +20,7 @@
   #define LOG_INTERVAL_DEFAUT_S  4
 #endif
 
+// Adapte la lecture des boutons aux variantes de câblage.
 #if TEST_CARTE_SEULE
   #define LIRE_ROUGE()  (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)
   #define LIRE_VERT()   false
@@ -48,7 +49,7 @@ static Appui_t  appui_rouge, appui_vert;
 static Config_t cfg;
 
 
-
+// Valeurs utilisées au premier démarrage.
 static void config_defauts(void)
 {
   cfg.log_interval_s = LOG_INTERVAL_DEFAUT_S;
@@ -84,6 +85,7 @@ static uint32_t calculer_somme(const Config_t *c)
 static void config_charger(void)
 {
   const Stockage_t *s = (const Stockage_t *)FLASH_CFG_ADRESSE;
+  // Une configuration invalide est remplacée par les valeurs par défaut.
   if (s->magic == FLASH_CFG_MAGIC &&
       s->taille == sizeof(Config_t) &&
       s->somme == calculer_somme(&s->cfg))
@@ -108,6 +110,7 @@ static bool config_sauver(void)
   memcpy(blocs, &s, sizeof(s));
 
   bool ok = true;
+  // La configuration est stockée dans la dernière page Flash.
   HAL_FLASH_Unlock();
   __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_ALL_ERRORS);
 
@@ -167,6 +170,7 @@ static void traiter_commande(char *cmd)
 {
   char msg[100];
 
+  // Les commandes sont insensibles à la casse.
   for (char *p = cmd; *p; p++) if (*p >= 'a' && *p <= 'z') *p -= 32;
 
   if (strcmp(cmd, "VERSION") == 0) { Serial_Print("Station meteo v1.0 - lot 001\r\n"); return; }
@@ -269,6 +273,7 @@ static void lire_console(void)
 static bool appui_long(Appui_t *a, bool presse)
 {
   uint32_t now = HAL_GetTick();
+  // Un appui est valide après cinq secondes sans relâchement.
   if (!presse) { a->actif = false; a->declenche = false; return false; }
   if (!a->actif) { a->actif = true; a->debut = now; a->declenche = false; return false; }
   if (!a->declenche && (now - a->debut) >= DUREE_APPUI_LONG_MS) {
@@ -282,6 +287,7 @@ static bool appui_long(Appui_t *a, bool presse)
 
 static void maj_led(void)
 {
+  // Une erreur est prioritaire sur la couleur du mode.
   if (erreur >= 0) { StatusLed_Set((LedEtat_t)erreur); return; }
   switch (mode_courant) {
     case MODE_STANDARD:      StatusLed_Set(LED_STANDARD);      break;
@@ -335,6 +341,7 @@ void Modes_Update(void)
   bool rouge_long = appui_long(&appui_rouge, rouge);
   bool vert_long  = appui_long(&appui_vert, vert);
 
+  // Les appuis longs déclenchent les changements de mode.
   switch (mode_courant)
   {
     case MODE_STANDARD:
@@ -399,6 +406,7 @@ void Modes_SuivreErreurs(bool rtc_ok, bool gps_ok, bool capteurs_ok, bool incohe
   bool err_cap = echec_repete(&e_cap, capteurs_ok);
   bool err_sd  = echec_repete(&e_sd,  sd_ok);
 
+  // La LED signale une erreur seulement après deux échecs consécutifs.
   if (err_rtc)         Modes_SetErreur(LED_ERR_RTC);
   else if (err_gps)    Modes_SetErreur(LED_ERR_GPS);
   else if (err_cap)    Modes_SetErreur(LED_ERR_CAPTEUR);

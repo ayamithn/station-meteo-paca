@@ -11,11 +11,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
+// Valeurs utilisees quand une mesure est indisponible.
 #define BME_NA   "NA"
 
-
+// Limites physiques servant a detecter les mesures incoherentes.
 #define BME_TEMP_MIN   (-40.0f)
 #define BME_TEMP_MAX   (85.0f)
 #define BME_HUM_MIN    (0.0f)
@@ -35,6 +34,7 @@ static void cycle_mesure(void)
 {
   const Config_t *c = Modes_Config();
 
+  // Chaque champ reste a "NA" si le capteur ne fournit pas de valeur.
   char date[24]  = "NA";
   char gps[40]   = "NA";
   char temp[16]  = BME_NA, hum[16] = BME_NA, pres[16] = BME_NA;
@@ -48,13 +48,11 @@ static void cycle_mesure(void)
   bool sd_ecrite = false;
 
 
+  // Acquisition de l'heure et de la position.
   rtc_ok = SensorRTC_Acquire(date, sizeof(date));
-
-
-
   if (Modes_GpsAutorise()) gps_ok = SensorGPS_Acquire(gps, sizeof(gps));
 
-
+  // Lecture du BME680 et controle des limites configurees.
   if (c->temp_air || c->hygr || c->pressure) {
     Env_Data e;
     if (SensorBME680_Read(&e)) {
@@ -82,7 +80,7 @@ static void cycle_mesure(void)
     }
   }
 
-
+  // Lecture de la luminosite si elle est activee.
   if (c->lumin) {
     lum_ok = SensorLight_Acquire(lum, sizeof(lum));
     if (lum_ok) {
@@ -91,15 +89,12 @@ static void cycle_mesure(void)
     }
   }
 
-
+  // Une ligne commune est envoyee au port serie et a la carte SD.
   snprintf(ligne, sizeof(ligne), "%s;%s;%s;%s;%s;%s;%s\r\n",
            date, gps, temp, hum, pres, gaz, lum);
-
-
   Serial_Print(ligne);
 
-
-
+  // Le mode maintenance interdit l'ecriture sur la carte SD.
   if (Modes_SdAutorisee()) {
 
     char ligne_sd[192];
@@ -119,6 +114,7 @@ static void cycle_mesure(void)
 
 int main(void)
 {
+  // Initialisation de la carte et des differents peripheriques.
   Board_Init();
   Global_Init();
   Modes_Init();
@@ -144,6 +140,7 @@ int main(void)
 
   while (1)
   {
+    // Les boutons et les changements de mode sont traites en continu.
     Modes_Update();
 
     Mode_t mode = Modes_Get();
@@ -157,6 +154,7 @@ int main(void)
       continue;
     }
 
+    // Une mesure est lancee immediatement, puis selon l'intervalle configure.
     if (!mesure_faite || (HAL_GetTick() - derniere_mesure) >= Modes_IntervalleMs()) {
       cycle_mesure();
       derniere_mesure = HAL_GetTick();

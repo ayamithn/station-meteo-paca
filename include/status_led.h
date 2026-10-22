@@ -15,6 +15,7 @@ typedef enum {
   LED_ERR_SD_ECRITURE
 } LedEtat_t;
 
+// Controle de la couleur et du clignotement de la LED.
 void StatusLed_Init(void);
 void StatusLed_Set(LedEtat_t etat);
 void StatusLed_Update(void);
