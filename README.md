@@ -125,7 +125,7 @@ date;latitude,longitude;temperature;humidite;pression;gaz;luminosite
 Exemple :
 
 ```text
-2026-10-22 20:57:28;43.2965,5.3698;22.4;58.2;1013.5;12500.0;FAIBLE
+2026-10-22 20:57:28;43.2965,5.3698;22.4;58.2;1013.5;12500.0;240
 ```
 
 Une donnée indisponible est enregistrée sous la forme `NA`. La valeur du gaz
